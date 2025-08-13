@@ -1,22 +1,24 @@
 package com.abhi.paymentservice.controllers;
 
-import com.abhi.paymentservice.services.PaymentServices;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.abhi.paymentservice.dtos.InitiatePaymentRequestDto;
+import com.abhi.paymentservice.services.PaymentService;
+import com.stripe.exception.StripeException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
 
-    private PaymentServices paymentServices;
-    public PaymentController(PaymentServices paymentServices){
+    private PaymentService paymentServices;
+    public PaymentController(PaymentService paymentServices){
         this.paymentServices = paymentServices ;
     }
 
-    @PostMapping("/{orderId}")
-    public String initiatePayment(@PathVariable String orderId){
-        return paymentServices.initiatePayment(orderId);
+    @PostMapping
+    public String initiatePayment(@RequestBody InitiatePaymentRequestDto paymentRequestDto) throws StripeException {
+
+        paymentServices.initiatePayment("orderID",
+                paymentRequestDto.getEmail(), paymentRequestDto.getPhoneNumber(), paymentRequestDto.getAmount());
+        return null ;
     }
 }

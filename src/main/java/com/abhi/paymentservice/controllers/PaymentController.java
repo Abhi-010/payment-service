@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/payments")
 public class PaymentController {
 
-    private PaymentService paymentServices;
+    private final PaymentService paymentServices;
     public PaymentController(PaymentService paymentServices){
         this.paymentServices = paymentServices ;
     }
 
     @PostMapping
-    public String initiatePayment(@RequestBody InitiatePaymentRequestDto paymentRequestDto) throws StripeException {
-
-        paymentServices.initiatePayment("orderID",
-                paymentRequestDto.getEmail(), paymentRequestDto.getPhoneNumber(), paymentRequestDto.getAmount());
-        return null ;
+    public String initiatePayment(@RequestBody InitiatePaymentRequestDto requestDto) throws StripeException {
+        return paymentServices.initiatePayment(requestDto.getOrderId(),requestDto.getEmail(),requestDto.getPhoneNumber(), requestDto.getAmount()) ;
     }
 }

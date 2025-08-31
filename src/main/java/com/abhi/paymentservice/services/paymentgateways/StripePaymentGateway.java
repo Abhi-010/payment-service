@@ -3,6 +3,7 @@ package com.abhi.paymentservice.services.paymentgateways;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import com.stripe.model.PaymentLink;
 import com.stripe.net.RequestOptions;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.PaymentLinkCreateParams;
@@ -24,52 +25,59 @@ public class StripePaymentGateway implements PaymentGateway{
     public String generatePaymentLink(String orderId, String email, String phoneNumber, Long amount) throws StripeException {
 
 
-        CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
-                .setEmail(email)
-                .setName("Abhishek Kumar")
-                //.setAddress(EmptyParam.valueOf("Bangalore India"))
-                .build();
-
-        Customer customer = Customer.create(customerCreateParams);
-
-
-
-
-//        PaymentLinkCreateParams params = PaymentLinkCreateParams.builder()
-//                .addLineItem(
-//                        PaymentLinkCreateParams.LineItem.builder()
-//                                .setQuantity(1L)
-//                                .setPriceData(
-//                                        PaymentLinkCreateParams.LineItem.PriceData.builder()
-//                                                .setCurrency("inr")
-//                                                .setUnitAmount(amount) // amount in paise
-//                                                .setProductData(
-//                                                        PaymentLinkCreateParams.LineItem.PriceData.ProductData.builder()
-//                                                                .setName("Order #" + orderId)
-//                                                                .build()
-//                                                )
-//                                                .build()
-//                                )
-//                                .build()
-//
-//                )
-//                .setCustomerCreation(PaymentLinkCreateParams.CustomerCreation.ALWAYS)
-//               // .setCustomerEmail() // already set
-//                .setBillingAddressCollection(PaymentLinkCreateParams.BillingAddressCollection.REQUIRED)
-//              // .setCustomerEmail(email) // email of buyer
-//                .setAfterCompletion(
-//                        PaymentLinkCreateParams.AfterCompletion.builder()
-//                                .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT) //
-//                                .setRedirect(
-//                                        PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
-//                                                .setUrl("https://scaler.com?payment_id={CHECKOUT_SESSION_ID}") // where user should go after payment
-//                                                .build()
-//                                )
-//                                .build()
-//                )
-//                .setCustomerCreation(PaymentLinkCreateParams.CustomerCreation.ALWAYS)
+//        CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
+//                .setEmail(email)
+//                .setName("Abhishek Kumar")
+//                //.setAddress(EmptyParam.valueOf("Bangalore India"))
 //                .build();
 
+        //Customer customer = Customer.create(customerCreateParams);
+
+
+
+        PaymentLinkCreateParams params = PaymentLinkCreateParams.builder()
+                .addLineItem(
+                        PaymentLinkCreateParams.LineItem.builder()
+                                .setQuantity(1L)
+                                .setPriceData(
+                                        PaymentLinkCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency("inr")
+                                                .setUnitAmount(amount) // amount in paise
+                                                .setProductData(
+                                                        PaymentLinkCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName("Order #" + orderId)
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build()
+
+                )
+                .setCustomerCreation(PaymentLinkCreateParams.CustomerCreation.ALWAYS)
+               // .setCustomerEmail() // already set
+                .setBillingAddressCollection(PaymentLinkCreateParams.BillingAddressCollection.REQUIRED)
+              // .setCustomerEmail(email) // email of buyer
+                .setAfterCompletion(
+                        PaymentLinkCreateParams.AfterCompletion.builder()
+                                .setType(PaymentLinkCreateParams.AfterCompletion.Type.REDIRECT) //
+                                .setRedirect(
+                                        PaymentLinkCreateParams.AfterCompletion.Redirect.builder()
+                                                .setUrl("https://scaler.com?payment_id={CHECKOUT_SESSION_ID}") // where user should go after payment
+                                                .build()
+                                )
+                                .build()
+                )
+                .setCustomerCreation(PaymentLinkCreateParams.CustomerCreation.ALWAYS)
+                .build();
+
+        PaymentLink paymentLink = PaymentLink.create(params);
+        return paymentLink.getUrl() ;
+        // Session session = Session.create(params,options);
+        //System.out.println("you are here..");
+        //System.out.println(session.getPaymentLink());
+
+
+        /*
         SessionCreateParams params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
@@ -99,11 +107,14 @@ public class StripePaymentGateway implements PaymentGateway{
                 RequestOptions.builder()
                         .setIdempotencyKey(orderId)
                         .build();
-       // PaymentLink paymentLink = PaymentLink.create(params,options);
 
-        Session session = Session.create(params,options);
-        System.out.println("you are here..");
-        System.out.println(session.toJson());
-        return session.getPaymentLink() ;
+
+         */
+//        PaymentLink paymentLink = PaymentLink.create(params);
+//
+//       // Session session = Session.create(params,options);
+//        System.out.println("you are here..");
+//        //System.out.println(session.getPaymentLink());
+//        return paymentLink.getUrl() ;
     }
 }

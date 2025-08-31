@@ -20,10 +20,10 @@ public class PaymentGatewayChooserStrategy {
 
         // business logic to select best payment gateway
 
-        int randomInt = new Random().nextInt() ;
-        if(randomInt%2 == 0){
-            return razorpayPaymentGateway;
-        }
+//        int randomInt = new Random().nextInt() ;
+//        if(randomInt%2 == 0){
+//            return razorpayPaymentGateway;
+//        }
         return stripePaymentGateway ;
     }
 }
